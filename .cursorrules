@@ -1,0 +1,43 @@
+# Cursor Rules: Flutter iOS Sideloading from Windows
+# Applies to all files in this repository
+
+You are assisting a developer working strictly on Windows building Flutter iOS applications deployed via Sideloading (SideStore / Sideloadly) with a Free Apple ID.
+
+## HARD PLATFORM CONSTRAINTS
+- NEVER suggest running `flutter build ios` or `flutter build ipa` on Windows. It requires macOS with Xcode. All iOS builds MUST run via GitHub Actions (`.github/workflows/build-ios-sideload.yml`).
+- Local Windows validation is strictly: `flutter analyze`, `flutter test`, and `flutter run -d <android-emulator>`.
+- NEVER suggest iOS Simulator on Windows. Use Android Emulator with `device_preview` and `ThemeData(platform: TargetPlatform.iOS)` for Cupertino styling.
+
+## PACKAGE RESTRICTIONS (Free Apple ID Sideloading)
+- STRICTLY FORBIDDEN:
+  - `firebase_messaging` -> APNs is blocked on Free Apple ID. Replace with `web_socket_channel` or `supabase_flutter` Realtime + `flutter_local_notifications`.
+  - `sign_in_with_apple` -> Blocked on Free Apple ID. Replace with `google_sign_in` or OAuth2 / email-password auth.
+  - `flutter_inapp_purchase` / `in_app_purchase` -> StoreKit blocked.
+  - iCloud plugins -> `icloud-container-identifiers` blocked.
+  - HomeKit, HealthKit, NFC plugins -> Hardware entitlements blocked.
+- SAFE & APPROVED:
+  - `sqflite`, `drift`, `isar`, `hive_flutter`, `shared_preferences`, `path_provider` (data persists in sandbox across 7-day SideStore renewals).
+  - `flutter_secure_storage` -> Safe in standalone single-app mode ONLY. DO NOT configure keychain sharing or App Groups.
+  - `flutter_local_notifications` -> Safe (uses UNUserNotificationCenter, no APNs needed).
+  - `local_auth` -> Safe (requires only `NSFaceIDUsageDescription` in Info.plist).
+  - `flutter_map` -> Recommended over `google_maps_flutter` (avoids 150MB native CocoaPods SDK overhead on CI).
+  - `sentry_flutter` -> Recommended for in-app Dart crash reporting (since native `.ips` symbolication requires Xcode on Mac).
+
+## ENTITLEMENTS & INFO.PLIST
+- `ios/Runner/Runner.entitlements`: MUST remain an empty dictionary `<dict></dict>` for Release builds. Sideloadly/SideStore injects personal team ID automatically.
+- `ios/Runner/Info.plist`: Never leave usage description strings empty. Must define:
+  - `NSCameraUsageDescription`, `NSPhotoLibraryUsageDescription`
+  - `NSLocationWhenInUseUsageDescription`, `NSFaceIDUsageDescription`, `NSMicrophoneUsageDescription`
+  - `ITSAppUsesNonExemptEncryption = false`
+
+## CI/CD BUILD RULES
+- Runner: `macos-14` (Apple Silicon).
+- Build command: `flutter build ios --release --no-codesign`.
+- Packaging: Manually assemble `Payload/Runner.app` into `Runner.ipa`.
+- Podfile: Always maintain `post_install` with `CODE_SIGNING_ALLOWED = 'NO'`, `IPHONEOS_DEPLOYMENT_TARGET = '13.0'`, and `EXCLUDED_ARCHS[sdk=iphonesimulator*] = 'arm64'`.
+
+## LOCAL DEV LOOP
+- Session: Always run `.\env.bat` or `. .\env.ps1` before executing Flutter commands to load local Flutter at `D:\source\IOS\flutter\bin` without altering global PATH.
+- Hot Reload on iPhone without Mac:
+  - Wi-Fi: `powershell tools/attach-wifi.ps1`
+  - USB: `powershell tools/attach-usb.ps1` (uses local `tools/bin/iproxy.exe`)
