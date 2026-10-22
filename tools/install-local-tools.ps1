@@ -12,7 +12,7 @@ New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
 Write-Host ">>> Preparing local tools directory at $BIN_DIR..." -ForegroundColor Cyan
 
 # 1. Download libimobiledevice prebuilt win64
-$libimobileUrl = "https://github.com/libimobiledevice-win32/imobiledevice-net/releases/download/v1.3.17/imobiledevice-x64.zip"
+$libimobileUrl = "https://github.com/libimobiledevice-win32/imobiledevice-net/releases/download/v1.3.17/libimobiledevice.1.2.1-r1122-win-x64.zip"
 $libimobileZip = Join-Path $TEMP_DIR "libimobiledevice.zip"
 
 try {
@@ -44,6 +44,6 @@ if (Test-Path $TEMP_DIR) {
 }
 
 Write-Host "==========================================================" -ForegroundColor Green
-Write-Host " Local tools check in $BIN_DIR:" -ForegroundColor Green
+Write-Host " Local tools check in ${BIN_DIR}:" -ForegroundColor Green
 Get-ChildItem -Path $BIN_DIR -Filter "*.exe" | Select-Object Name
 Write-Host "==========================================================" -ForegroundColor Green

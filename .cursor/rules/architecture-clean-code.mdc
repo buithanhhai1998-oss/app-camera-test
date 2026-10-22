@@ -1,0 +1,27 @@
+---
+description: Clean Architecture, Local-First persistence, and coding patterns for Flutter app development
+globs: app/lib/**/*
+alwaysApply: true
+---
+
+# Flutter Clean Architecture & Coding Standards
+
+## 1. Directory Structure & Layering
+- Keep presentation, domain, and data layers separated:
+  - `lib/core/`: Constants, formatters, shared network/error models.
+  - `lib/data/`: Models (serializable), local SQLite / Hive datasources, remote clients.
+  - `lib/domain/`: Pure Dart business entities, abstract repository interfaces.
+  - `lib/presentation/`: Screens, widgets, state management controllers/notifiers.
+- Never write direct database queries or raw HTTP calls inside `Widget.build()` or `initState()`.
+
+## 2. Local-First Data Flow (iOS Sideload Safe)
+- Local SQLite database is the primary source of truth.
+- Reads: Always read from local storage or local reactive stream.
+- Writes: Save locally first -> update UI -> attempt background sync.
+- Sandbox Files: Always use `path_provider` (`getApplicationDocumentsDirectory()`) to store files. Never use hardcoded paths.
+- Secure Data: Use `flutter_secure_storage` strictly in single-app mode (no keychain sharing or App Groups).
+
+## 3. Safe Lifecycle & Cupertino Adaptation
+- Always check `if (!mounted) return;` after `await` in `StatefulWidget` callbacks before calling `setState()` or `Navigator`.
+- Wrap scaffolds in `SafeArea` to avoid clipping under Dynamic Island, iPhone notch, or Home Indicator.
+- Always dispose controllers (`TextEditingController`, `AnimationController`, `StreamController`) in `dispose()`.

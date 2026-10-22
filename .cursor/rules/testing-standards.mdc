@@ -1,0 +1,24 @@
+---
+description: Automated testing standards, widget testing, and mocking native iOS channels on Windows
+globs: app/test/**/*
+alwaysApply: true
+---
+
+# Flutter Testing Standards (Windows Workstation)
+
+## 1. Test Without iOS Hardware
+- Tests must execute and pass locally on Windows using `flutter test` without needing Xcode or an actual iPhone.
+- Pure business logic, state machines, and models belong in `test/unit/`.
+- UI rendering and interactions belong in `test/widgets/`.
+
+## 2. Mocking Native Platform Plugins
+- For SQLite testing: Use `sqflite_common_ffi` with `sqfliteFfiInit()` and `inMemoryDatabasePath` to run real SQLite queries in unit tests on Windows.
+- For Secure Storage: Mock `FlutterSecureStorage` with an in-memory `Map<String, String>` implementation.
+- For Biometrics (`local_auth`): Mock `LocalAuthentication` with `mocktail` so biometrics tests pass deterministically.
+- For Local Notifications: Mock `FlutterLocalNotificationsPlugin`.
+
+## 3. Widget Testing Checklist
+- Wrap widgets under test in `MaterialApp` or `CupertinoApp` with directionality and responsive media queries.
+- Use `find.byKey()` or `find.byType()` rather than fragile text matchers when text is localized.
+- Use `await tester.pumpAndSettle()` for animations to finish, or `tester.pump(duration)` for periodic timers / infinite loaders.
+- Verify `flutter test` exits with 0 failures before proposing Git commits.

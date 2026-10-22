@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Downloads and extracts official portable Flutter SDK directly into D:\source\IOS\flutter
-Completely self-contained - zero global modifications.
+High-speed, resilient Flutter SDK installer for D:\source\IOS\flutter.
+Completely localized - zero global modifications.
 """
 
 import os
 import sys
 import json
 import urllib.request
-import zipfile
+import subprocess
 import shutil
 
 IOS_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -18,8 +18,8 @@ TEMP_ZIP = os.path.join(IOS_ROOT, "tools", "temp_flutter.zip")
 def main():
     flutter_bat = os.path.join(FLUTTER_DEST, "bin", "flutter.bat")
     if os.path.exists(flutter_bat):
-        print(f"[OK] Flutter SDK already installed at: {FLUTTER_DEST}")
-        os.system(f'"{flutter_bat}" --version')
+        print(f"[OK] Flutter SDK is already installed at: {FLUTTER_DEST}")
+        subprocess.run([flutter_bat, "--version"])
         return
 
     print(">>> Fetching Flutter release metadata...")
@@ -41,32 +41,51 @@ def main():
     print(f">>> Downloading from: {archive_url}")
     print(f">>> Destination: {TEMP_ZIP}")
 
-    def report_progress(block_num, block_size, total_size):
-        downloaded = block_num * block_size
-        if total_size > 0:
-            percent = downloaded * 100 / total_size
-            mb = downloaded / (1024 * 1024)
-            total_mb = total_size / (1024 * 1024)
-            sys.stdout.write(f"\rDownloading: {percent:.1f}% ({mb:.1f} MB / {total_mb:.1f} MB)")
-            sys.stdout.flush()
-
     os.makedirs(os.path.dirname(TEMP_ZIP), exist_ok=True)
-    urllib.request.urlretrieve(archive_url, TEMP_ZIP, report_progress)
+
+    # Use curl.exe if available for fast download with resume capability
+    curl_path = shutil.which("curl")
+    if curl_path:
+        print(">>> Using Windows curl with resume support...")
+        cmd = [curl_path, "-L", "-C", "-", "--retry", "5", "--retry-delay", "2", "-o", TEMP_ZIP, archive_url]
+        res = subprocess.run(cmd)
+        if res.returncode != 0:
+            print("[!] curl failed, falling back to urllib...")
+            urllib.request.urlretrieve(archive_url, TEMP_ZIP)
+    else:
+        print(">>> Downloading via urllib...")
+        urllib.request.urlretrieve(archive_url, TEMP_ZIP)
+
     print("\n[OK] Download complete.")
 
     print(f">>> Extracting to {IOS_ROOT}...")
-    with zipfile.ZipFile(TEMP_ZIP, "r") as z:
-        z.extractall(IOS_ROOT)
+    tar_path = shutil.which("tar")
+    if tar_path:
+        print(">>> Using high-speed tar.exe for extraction...")
+        cmd = [tar_path, "-xf", TEMP_ZIP, "-C", IOS_ROOT]
+        res = subprocess.run(cmd)
+        if res.returncode != 0:
+            print("[!] tar failed, falling back to zipfile...")
+            import zipfile
+            with zipfile.ZipFile(TEMP_ZIP, "r") as z:
+                z.extractall(IOS_ROOT)
+    else:
+        import zipfile
+        with zipfile.ZipFile(TEMP_ZIP, "r") as z:
+            z.extractall(IOS_ROOT)
 
     print("[OK] Extraction complete.")
     if os.path.exists(TEMP_ZIP):
-        os.remove(TEMP_ZIP)
+        try:
+            os.remove(TEMP_ZIP)
+        except Exception:
+            pass
 
     print(f"============================================================")
     print(f" [SUCCESS] Flutter SDK installed at: {FLUTTER_DEST}")
-    print(f" You can now run .\\env.bat to start working!")
+    print(f" Initializing Flutter toolchain...")
     print(f"============================================================")
-    os.system(f'"{flutter_bat}" --version')
+    subprocess.run([flutter_bat, "--version"])
 
 if __name__ == "__main__":
     main()
