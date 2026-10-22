@@ -1,0 +1,29 @@
+# Local Flutter SDK & Portable Tools (Installed locally in D:\source\IOS, not committed to git)
+flutter/
+tools/bin/
+tools/temp/
+*.mobiledevicepairing
+*.plist
+*.ips
+
+# Flutter Build Artifacts
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/.packages
+app/.pub-cache/
+app/.pub/
+app/build/
+app/ios/Pods/
+app/ios/.symlinks/
+app/ios/Flutter/Generated.xcconfig
+app/ios/Flutter/flutter_export_environment.sh
+
+# IDE & OS Files
+.idea/
+.vscode/
+*.swp
+*.lock
+*.log
+Thumbs.db
+[Dd]esktop.ini

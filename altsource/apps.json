@@ -1,0 +1,43 @@
+{
+  "name": "My Sideloaded Apps",
+  "identifier": "com.developer.sideload.source",
+  "apiVersion": "v2",
+  "subtitle": "Self-hosted Flutter iOS apps for SideStore",
+  "description": "Continuous delivery for Flutter iOS apps built on Windows via GitHub Actions.",
+  "iconURL": "https://raw.githubusercontent.com/flutter/assets-for-api-docs/master/assets/logos/flutter_logo.png",
+  "website": "https://github.com",
+  "tintColor": "#02569B",
+  "apps": [
+    {
+      "name": "Flutter Sideload App",
+      "bundleIdentifier": "com.devalias.fluttersideload",
+      "developerName": "Independent Developer",
+      "subtitle": "Built from Windows, deployed via SideStore",
+      "localizedDescription": "Production Flutter iOS application developed completely on Windows, built via GitHub Actions, and installed via SideStore with automatic 7-day on-device renewals.",
+      "iconURL": "https://raw.githubusercontent.com/flutter/assets-for-api-docs/master/assets/logos/flutter_logo.png",
+      "category": "utilities",
+      "tintColor": "#02569B",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-10-22",
+          "localizedDescription": "Initial stable sideload release",
+          "downloadURL": "https://github.com/USER/REPO/releases/download/v1.0.0/Runner.ipa",
+          "size": 15000000,
+          "minOSVersion": "13.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {
+          "NSCameraUsageDescription": "Camera permission is used to scan QR codes and capture photos.",
+          "NSPhotoLibraryUsageDescription": "Photo Library access is used to select images.",
+          "NSLocationWhenInUseUsageDescription": "Location is used to display interactive map positions.",
+          "NSFaceIDUsageDescription": "Face ID is used for secure biometric sign-in."
+        }
+      }
+    }
+  ],
+  "news": []
+}

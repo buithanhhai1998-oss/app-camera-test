@@ -1,0 +1,55 @@
+name: flutter_sideload_app
+description: "A production Flutter application optimized for iOS Sideloading from Windows."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI / Cupertino Simulation
+  cupertino_icons: ^1.0.8
+  device_preview: ^1.2.0
+
+  # Safe Local-First Storage (100% Sideload Compatible)
+  sqflite: ^2.3.3+1
+  path_provider: ^2.1.4
+  path: ^1.9.0
+  shared_preferences: ^2.3.2
+
+  # Secure Storage (Single-App Keychain Mode Only - No Keychain Sharing)
+  flutter_secure_storage: ^9.2.2
+
+  # Networking & Realtime (APNs Replacement)
+  http: ^1.2.2
+  dio: ^5.7.0
+  web_socket_channel: ^3.0.1
+  supabase_flutter: ^2.6.0
+
+  # Local Notifications (Replaces APNs for alerts)
+  flutter_local_notifications: ^17.2.2
+
+  # Biometric Auth (Safe Info.plist permission only)
+  local_auth: ^2.2.0
+
+  # Media & Hardware (Safe Info.plist permissions only)
+  image_picker: ^1.1.2
+  geolocator: ^12.0.0
+
+  # Map (Pure Dart - Avoids 150MB Google Maps SDK bloat on CI)
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
+  # Crash Reporting without Xcode Symbolication
+  sentry_flutter: ^8.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
