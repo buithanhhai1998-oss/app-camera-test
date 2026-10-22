@@ -50,7 +50,6 @@ class SideloadApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sideload iOS App',
       debugShowCheckedModeBanner: false,
-      useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       theme: ThemeData(
