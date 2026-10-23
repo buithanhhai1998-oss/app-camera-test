@@ -23,18 +23,6 @@ dependencies:
   path: ^1.9.0
   shared_preferences: ^2.3.2
 
-  # Secure Storage (Single-App Keychain Mode Only - No Keychain Sharing)
-  flutter_secure_storage: ^9.2.2
-
-  # Networking & Realtime (APNs Replacement)
-  http: ^1.2.2
-  dio: ^5.7.0
-  web_socket_channel: ^3.0.1
-  supabase_flutter: ^2.6.0
-
-  # Local Notifications (Replaces APNs for alerts)
-  flutter_local_notifications: ^17.2.2
-
   # Biometric Auth (Safe Info.plist permission only)
   local_auth: ^2.2.0
 
@@ -42,14 +30,6 @@ dependencies:
   camera: ^0.11.0+1
   video_player: ^2.9.2
   image_picker: ^1.1.2
-  geolocator: ^12.0.0
-
-  # Map (Pure Dart - Avoids 150MB Google Maps SDK bloat on CI)
-  flutter_map: ^7.0.2
-  latlong2: ^0.9.1
-
-  # Crash Reporting without Xcode Symbolication
-  sentry_flutter: ^8.9.0
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +41,6 @@ dev_dependencies:
 dependency_overrides:
   shared_preferences_foundation: 2.5.7
   video_player_avfoundation: 2.10.0
-
 
 flutter:
   uses-material-design: true
