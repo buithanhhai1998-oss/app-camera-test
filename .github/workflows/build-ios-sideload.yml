@@ -14,6 +14,8 @@ jobs:
   build-ios:
     name: Build iOS IPA (Sideload-Ready, Unsigned)
     runs-on: macos-14 # Apple Silicon M1/M2 runner
+    permissions:
+      contents: write
 
     defaults:
       run:

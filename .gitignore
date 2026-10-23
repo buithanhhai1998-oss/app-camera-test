@@ -1,7 +1,7 @@
 # Local Flutter SDK & Portable Tools (Installed locally in D:\source\IOS, not committed to git)
-flutter/
-tools/bin/
-tools/temp/
+/flutter/
+/tools/bin/
+/tools/temp/
 *.mobiledevicepairing
 *.ips
 tools/**/*.plist
