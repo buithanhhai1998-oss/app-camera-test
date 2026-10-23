@@ -2,7 +2,7 @@ name: Flutter iOS Sideload Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
     tags: [ 'v*.*.*' ]
   workflow_dispatch:
 
@@ -37,10 +37,8 @@ jobs:
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.5'
           channel: 'stable'
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:'
 
       - name: Cache Pub Dependencies
         uses: actions/cache@v4
