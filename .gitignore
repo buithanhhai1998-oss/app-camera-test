@@ -25,6 +25,8 @@ app/ios/Flutter/flutter_export_environment.sh
 .vscode/
 *.swp
 *.lock
+!app/pubspec.lock
+!app/ios/Podfile.lock
 *.log
 Thumbs.db
 [Dd]esktop.ini

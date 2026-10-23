@@ -58,5 +58,8 @@ dev_dependencies:
   mocktail: ^1.0.4
   sqflite_common_ffi: ^2.3.4
 
+dependency_overrides:
+  shared_preferences_foundation: 2.5.7
+
 flutter:
   uses-material-design: true
