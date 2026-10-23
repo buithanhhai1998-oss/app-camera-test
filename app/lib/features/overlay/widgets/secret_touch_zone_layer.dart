@@ -6,6 +6,7 @@ class SecretTouchZoneLayer extends StatefulWidget {
   final VoidCallback onStopDoubleTap;
   final VoidCallback onUnlockLongPress;
   final VoidCallback onSwitchLensDoubleTap;
+  final VoidCallback onOpacityTap;
   final VoidCallback onThreeFingerTap;
   final Widget? child;
 
@@ -14,6 +15,7 @@ class SecretTouchZoneLayer extends StatefulWidget {
     required this.onStopDoubleTap,
     required this.onUnlockLongPress,
     required this.onSwitchLensDoubleTap,
+    required this.onOpacityTap,
     required this.onThreeFingerTap,
     this.child,
   });
@@ -91,6 +93,20 @@ class _SecretTouchZoneLayerState extends State<SecretTouchZoneLayer> {
                   key: const Key('secret_zone_stop'),
                   behavior: HitTestBehavior.opaque,
                   onDoubleTap: widget.onStopDoubleTap,
+                  child: const ColoredBox(color: Colors.transparent),
+                ),
+              ),
+
+              // Bottom-Left: Opacity Cycle / Peek Mode (Tap)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                width: zoneWidth,
+                height: zoneHeight,
+                child: GestureDetector(
+                  key: const Key('secret_zone_opacity'),
+                  behavior: HitTestBehavior.opaque,
+                  onTap: widget.onOpacityTap,
                   child: const ColoredBox(color: Colors.transparent),
                 ),
               ),

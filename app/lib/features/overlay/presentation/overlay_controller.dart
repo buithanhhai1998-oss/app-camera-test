@@ -66,6 +66,47 @@ class OverlayController extends StateNotifier<CameraOverlayState> {
     } catch (_) {}
   }
 
+  /// Increases opacity by [step] (up to 1.0) to make decoy less transparent.
+  Future<void> increaseOpacity([double step = 0.2]) async {
+    final newOpacity = (state.opacity + step).clamp(0.0, 1.0);
+    await setOpacity(newOpacity);
+    await _haptic.selectionClick();
+  }
+
+  /// Decreases opacity by [step] (down to 0.1) so user can peek through to preview camera.
+  Future<void> decreaseOpacity([double step = 0.2]) async {
+    final newOpacity = (state.opacity - step).clamp(0.1, 1.0);
+    await setOpacity(newOpacity);
+    await _haptic.selectionClick();
+  }
+
+  /// Toggles between fully masked (1.0) and translucent peek mode (0.35).
+  Future<void> togglePeekOpacity() async {
+    if (state.opacity >= 0.7) {
+      await setOpacity(0.35); // Peek through to see camera framing
+    } else {
+      await setOpacity(1.0); // Completely hide camera
+    }
+    await _haptic.selectionClick();
+  }
+
+  /// Cycles opacity across 4 presets: 1.0 (Full mask) -> 0.65 -> 0.35 (Peek) -> 0.1.
+  Future<void> cycleOpacity() async {
+    final current = state.opacity;
+    double next;
+    if (current >= 0.9) {
+      next = 0.65;
+    } else if (current >= 0.55) {
+      next = 0.35;
+    } else if (current >= 0.25) {
+      next = 0.10;
+    } else {
+      next = 1.0;
+    }
+    await setOpacity(next);
+    await _haptic.selectionClick();
+  }
+
   /// Toggles visibility of the secret hint overlay (wireframe boxes for touch zones).
   /// Triggered by 3-finger tap.
   Future<void> toggleSecretHints() async {

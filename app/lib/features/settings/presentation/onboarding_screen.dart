@@ -102,10 +102,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                     const SizedBox(height: 12),
                     _buildGestureTile(
+                      color: Colors.tealAccent,
+                      icon: Icons.opacity,
+                      title: 'Góc Dưới - Trái (Bottom-Left)',
+                      subtitle: 'Chạm để đổi độ mờ ảnh che (100% ⟷ Nhìn xuyên 35%) để kiểm tra góc quay của camera.',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildGestureTile(
                       color: Colors.greenAccent,
                       icon: Icons.touch_app,
                       title: 'Chạm 3 ngón tay cùng lúc',
-                      subtitle: 'Bật / Tắt viền hướng dẫn vị trí các vùng bấm nếu bạn quên.',
+                      subtitle: 'Bật / Tắt viền hướng dẫn kèm nút tăng giảm độ mờ [+]/[-] trực tiếp.',
                     ),
                     const SizedBox(height: 16),
 

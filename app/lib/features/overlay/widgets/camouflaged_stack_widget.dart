@@ -13,7 +13,11 @@ class CamouflagedStackWidget extends StatelessWidget {
   final VoidCallback onStopDoubleTap;
   final VoidCallback onUnlockLongPress;
   final VoidCallback onSwitchLensDoubleTap;
+  final VoidCallback onOpacityTap;
   final VoidCallback onThreeFingerTap;
+  final VoidCallback? onIncreaseOpacity;
+  final VoidCallback? onDecreaseOpacity;
+  final VoidCallback? onTogglePeekOpacity;
 
   const CamouflagedStackWidget({
     super.key,
@@ -24,7 +28,11 @@ class CamouflagedStackWidget extends StatelessWidget {
     required this.onStopDoubleTap,
     required this.onUnlockLongPress,
     required this.onSwitchLensDoubleTap,
+    required this.onOpacityTap,
     required this.onThreeFingerTap,
+    this.onIncreaseOpacity,
+    this.onDecreaseOpacity,
+    this.onTogglePeekOpacity,
   });
 
   @override
@@ -49,6 +57,10 @@ class CamouflagedStackWidget extends StatelessWidget {
               showHints: overlayState.showSecretHints,
               isRecording: isRecording,
               elapsedDuration: elapsedDuration,
+              opacity: overlayState.opacity,
+              onIncreaseOpacity: onIncreaseOpacity,
+              onDecreaseOpacity: onDecreaseOpacity,
+              onTogglePeekOpacity: onTogglePeekOpacity,
             ),
 
             // Layer 4 (Top): Secret Gesture Detection Zones
@@ -56,6 +68,7 @@ class CamouflagedStackWidget extends StatelessWidget {
               onStopDoubleTap: onStopDoubleTap,
               onUnlockLongPress: onUnlockLongPress,
               onSwitchLensDoubleTap: onSwitchLensDoubleTap,
+              onOpacityTap: onOpacityTap,
               onThreeFingerTap: onThreeFingerTap,
             ),
           ],

@@ -171,5 +171,40 @@ void main() {
       overlayController.setVaultUnlocked(false);
       expect(overlayController.state.isVaultUnlocked, isFalse);
     });
+
+    test('Increase and decrease opacity step methods', () async {
+      await overlayController.setOpacity(0.5);
+      expect(overlayController.state.opacity, equals(0.5));
+
+      await overlayController.increaseOpacity(0.2);
+      expect(overlayController.state.opacity, closeTo(0.7, 0.001));
+
+      await overlayController.decreaseOpacity(0.3);
+      expect(overlayController.state.opacity, closeTo(0.4, 0.001));
+    });
+
+    test('togglePeekOpacity switches between 1.0 and 0.35', () async {
+      await overlayController.setOpacity(1.0);
+      await overlayController.togglePeekOpacity();
+      expect(overlayController.state.opacity, equals(0.35));
+
+      await overlayController.togglePeekOpacity();
+      expect(overlayController.state.opacity, equals(1.0));
+    });
+
+    test('cycleOpacity cycles across 4 presets', () async {
+      await overlayController.setOpacity(1.0);
+      await overlayController.cycleOpacity();
+      expect(overlayController.state.opacity, equals(0.65));
+
+      await overlayController.cycleOpacity();
+      expect(overlayController.state.opacity, equals(0.35));
+
+      await overlayController.cycleOpacity();
+      expect(overlayController.state.opacity, equals(0.10));
+
+      await overlayController.cycleOpacity();
+      expect(overlayController.state.opacity, equals(1.0));
+    });
   });
 }

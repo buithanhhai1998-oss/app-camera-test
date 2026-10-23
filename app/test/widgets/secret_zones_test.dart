@@ -20,6 +20,7 @@ void main() {
             onStopDoubleTap: () => stopTriggered = true,
             onUnlockLongPress: () => unlockTriggered = true,
             onSwitchLensDoubleTap: () {},
+            onOpacityTap: () {},
             onThreeFingerTap: () {},
           ),
         ),
@@ -52,6 +53,7 @@ void main() {
             onStopDoubleTap: () {},
             onUnlockLongPress: () => unlockTriggered = true,
             onSwitchLensDoubleTap: () {},
+            onOpacityTap: () {},
             onThreeFingerTap: () {},
           ),
         ),
@@ -67,39 +69,68 @@ void main() {
       expect(unlockTriggered, isTrue);
     });
 
-    testWidgets('Hint wireframe is hidden when showSecretHints is false and visible when true', (tester) async {
+    testWidgets('Tapping Bottom-Left zone triggers opacity cycle callback', (tester) async {
+      bool opacityTriggered = false;
+
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: HintWireframeOverlay(
-              showHints: false,
-              isRecording: true,
-              elapsedDuration: Duration(seconds: 10),
-            ),
+        MaterialApp(
+          home: CamouflagedStackWidget(
+            cameraPreview: const SizedBox(),
+            overlayState: const CameraOverlayState(),
+            isRecording: false,
+            elapsedDuration: Duration.zero,
+            onStopDoubleTap: () {},
+            onUnlockLongPress: () {},
+            onSwitchLensDoubleTap: () {},
+            onOpacityTap: () => opacityTriggered = true,
+            onThreeFingerTap: () {},
           ),
         ),
       );
 
-      // Hints should not be rendered
-      expect(find.textContaining('Nhấp đúp Dừng & Lưu'), findsNothing);
+      final opacityFinder = find.byKey(const Key('secret_zone_opacity'));
+      expect(opacityFinder, findsOneWidget);
 
-      // Now set showHints = true
+      await tester.tap(opacityFinder);
+      await tester.pumpAndSettle();
+
+      expect(opacityTriggered, isTrue);
+    });
+
+    testWidgets('Hint wireframe shows opacity adjustment buttons [+] and [-]', (tester) async {
+      bool increased = false;
+      bool decreased = false;
+      bool peekToggled = false;
+
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HintWireframeOverlay(
               showHints: true,
               isRecording: true,
-              elapsedDuration: Duration(seconds: 10),
+              elapsedDuration: const Duration(seconds: 10),
+              opacity: 0.8,
+              onIncreaseOpacity: () => increased = true,
+              onDecreaseOpacity: () => decreased = true,
+              onTogglePeekOpacity: () => peekToggled = true,
             ),
           ),
         ),
       );
 
-      // Wireframe guide text and status must now be rendered
-      expect(find.textContaining('Nhấp đúp Dừng & Lưu'), findsOneWidget);
-      expect(find.textContaining('Giữ 2s mở Khóa'), findsOneWidget);
-      expect(find.textContaining('REC 00:10'), findsOneWidget);
+      expect(find.textContaining('80%'), findsNWidgets(2));
+      expect(find.byKey(const Key('btn_decrease_opacity')), findsOneWidget);
+      expect(find.byKey(const Key('btn_increase_opacity')), findsOneWidget);
+      expect(find.byKey(const Key('btn_toggle_peek')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('btn_decrease_opacity')));
+      expect(decreased, isTrue);
+
+      await tester.tap(find.byKey(const Key('btn_increase_opacity')));
+      expect(increased, isTrue);
+
+      await tester.tap(find.byKey(const Key('btn_toggle_peek')));
+      expect(peekToggled, isTrue);
     });
   });
 }

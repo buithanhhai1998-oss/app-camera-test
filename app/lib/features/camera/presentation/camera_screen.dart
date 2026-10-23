@@ -216,6 +216,11 @@ class _CameraScreenState extends ConsumerState<CameraScreen> with WidgetsBinding
     }
   }
 
+  /// Bottom-Left: Tap -> Cycle Opacity (Peek camera preview)
+  void _onOpacityTap() {
+    ref.read(overlayControllerProvider.notifier).cycleOpacity();
+  }
+
   /// 3-Finger Tap: Toggle Visual Hint Overlay
   void _onThreeFingerTap() {
     ref.read(overlayControllerProvider.notifier).toggleSecretHints();
@@ -267,7 +272,11 @@ class _CameraScreenState extends ConsumerState<CameraScreen> with WidgetsBinding
       onStopDoubleTap: _onStopDoubleTap,
       onUnlockLongPress: _onUnlockLongPress,
       onSwitchLensDoubleTap: _onSwitchLensDoubleTap,
+      onOpacityTap: _onOpacityTap,
       onThreeFingerTap: _onThreeFingerTap,
+      onIncreaseOpacity: () => ref.read(overlayControllerProvider.notifier).increaseOpacity(),
+      onDecreaseOpacity: () => ref.read(overlayControllerProvider.notifier).decreaseOpacity(),
+      onTogglePeekOpacity: () => ref.read(overlayControllerProvider.notifier).togglePeekOpacity(),
     );
   }
 }

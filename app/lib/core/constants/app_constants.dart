@@ -21,6 +21,10 @@ class AppConstants {
   static const double switchLensZoneWidthRatio = 0.30;
   static const double switchLensZoneHeightRatio = 0.20;
 
+  // Bottom-Left: Opacity Adjust / Peek Camera View (Tap / Double Tap)
+  static const double opacityZoneWidthRatio = 0.30;
+  static const double opacityZoneHeightRatio = 0.20;
+
   // Haptic feedback timing
   static const Duration hapticPulseInterval = Duration(milliseconds: 150);
 }
