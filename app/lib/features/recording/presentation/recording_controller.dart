@@ -12,6 +12,15 @@ class RecordingController extends StateNotifier<RecordingState> {
       : _haptic = haptic ?? const HapticFeedbackService(),
         super(const RecordingState());
 
+  /// Public getters avoiding protected state member warnings.
+  RecordingState get currentState => state;
+  RecordingStatus get currentStatus => state.status;
+  bool get isRecording => state.isRecording;
+  bool get canStart => state.canStart;
+  bool get canStop => state.canStop;
+  Duration get elapsedDuration => state.elapsedDuration;
+  String? get currentFilePath => state.currentFilePath;
+
   /// Sets state to ready when camera preview is successfully initialized.
   void setReady() {
     if (state.status == RecordingStatus.recording || state.status == RecordingStatus.stopping) {
