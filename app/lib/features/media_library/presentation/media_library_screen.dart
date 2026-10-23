@@ -168,12 +168,12 @@ class _MediaLibraryScreenState extends State<MediaLibraryScreen> {
   }
 
   Widget _buildEmptyState() {
-    return Center(
+    return const Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.video_library_outlined, size: 72, color: Colors.white24),
             SizedBox(height: 16),
             Text(

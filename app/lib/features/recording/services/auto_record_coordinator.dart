@@ -15,24 +15,18 @@ class AutoRecordCoordinator {
   final OnRecordingSaved? _onRecordingSaved;
 
   Timer? _safetyAutoStopTimer;
-  Duration? _maxRecordingDuration; // null = unlimited
+  Duration? maxRecordingDuration; // null = unlimited
 
   AutoRecordCoordinator({
     required CameraService cameraService,
     required RecordingStorageService storageService,
     required RecordingController recordingController,
     OnRecordingSaved? onRecordingSaved,
-    Duration? maxRecordingDuration,
+    this.maxRecordingDuration,
   })  : _cameraService = cameraService,
         _storageService = storageService,
         _recordingController = recordingController,
-        _onRecordingSaved = onRecordingSaved,
-        _maxRecordingDuration = maxRecordingDuration;
-
-  Duration? get maxRecordingDuration => _maxRecordingDuration;
-  set maxRecordingDuration(Duration? duration) {
-    _maxRecordingDuration = duration;
-  }
+        _onRecordingSaved = onRecordingSaved;
 
   /// Initiates recording session.
   Future<bool> startSession() async {
@@ -48,7 +42,7 @@ class AutoRecordCoordinator {
       if (!started) return false;
 
       // Start safety auto-stop if configured
-      final maxDuration = _maxRecordingDuration;
+      final maxDuration = maxRecordingDuration;
       if (maxDuration != null && maxDuration > Duration.zero) {
         _safetyAutoStopTimer?.cancel();
         _safetyAutoStopTimer = Timer(maxDuration, () async {

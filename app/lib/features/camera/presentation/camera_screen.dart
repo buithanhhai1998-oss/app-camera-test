@@ -181,6 +181,8 @@ class _CameraScreenState extends ConsumerState<CameraScreen> with WidgetsBinding
         await _coordinator.stopAndSaveSession();
       }
 
+      if (!mounted) return;
+
       Navigator.push(
         context,
         MaterialPageRoute(
